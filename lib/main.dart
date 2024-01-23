@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:alarm_application/bloc/hive_alarm_bloc.dart';
 import 'package:alarm_application/bloc/weather_bloc.dart';
 import 'package:alarm_application/models/alarm_model.dart';
@@ -11,10 +12,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(AlarmModelAdapter().typeId)) {
-    print("hi");
     Hive.registerAdapter(AlarmModelAdapter());
-    print("reg");
   }
+  await Alarm.init();
+  // Hive.registerAdapter(AlarmModelAdapter());
+  // await Hive.openBox('alarm_box');
+
   runApp(MultiBlocProvider(
     providers: [
       BlocProvider(

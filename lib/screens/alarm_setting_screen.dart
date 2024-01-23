@@ -64,16 +64,16 @@ class _AlarmSettingScreenState extends State<AlarmSettingScreen> {
               hintText: 'Label',
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              context.read<HiveAlarmBloc>().add(
-                    HiveAlarmAdd(
-                      AlarmModel(selectedDateTime, labelController.text),
-                    ),
-                  );
-            },
-            child: const Text('Add'),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     context.read<HiveAlarmBloc>().add(
+          //           HiveAlarmAdd(
+          //             AlarmModel(selectedDateTime, labelController.text),
+          //           ),
+          //         );
+          //   },
+          //   child: const Text('Add'),
+          // ),
         ],
       )),
     );

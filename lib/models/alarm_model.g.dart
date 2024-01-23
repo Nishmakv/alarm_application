@@ -8,7 +8,7 @@ part of 'alarm_model.dart';
 
 class AlarmModelAdapter extends TypeAdapter<AlarmModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   AlarmModel read(BinaryReader reader) {
@@ -17,18 +17,21 @@ class AlarmModelAdapter extends TypeAdapter<AlarmModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return AlarmModel(
-      fields[0] as DateTime,
-      fields[1] as String,
+      id: fields[0] as int?,
+      time: fields[1] as DateTime,
+      label: fields[2] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, AlarmModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.time)
+      ..write(obj.id)
       ..writeByte(1)
+      ..write(obj.time)
+      ..writeByte(2)
       ..write(obj.label);
   }
 

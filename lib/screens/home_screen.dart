@@ -1,8 +1,11 @@
 import 'package:alarm_application/bloc/hive_alarm_bloc.dart';
+import 'package:alarm_application/functions/db_functions.dart';
 import 'package:alarm_application/models/alarm_model.dart';
-import 'package:alarm_application/screens/alarm_setting_screen.dart';
+
+import 'package:alarm_application/screens/set_alarm_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:ionicons/ionicons.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    getAllAlarms();
     return BlocListener<HiveAlarmBloc, HiveAlarmState>(
       listener: (context, state) {
         if (state is HiveAlarmLoadSuccess) {
@@ -33,46 +37,56 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         body: SafeArea(
-          child: Column(
-            children: [
-              BlocBuilder<HiveAlarmBloc, HiveAlarmState>(
-                builder: (context, state) {
-                  if (state is HiveAlarmLoadLoading) {
-                    return Center(
-                      child: Text('hy'),
-                    );
-                  } else if (state is HiveAlarmLoadSuccess) {
-                    return SizedBox(
-                      height: 50,
-                      child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            return Container(
-                              height: 50,
-                              width: 50,
-                              child: Text(alarmModel[index].label),
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return Divider();
-                          },
-                          itemCount: alarmModel.length),
-                    );
-                  } else {
-                    return SizedBox();
-                  }
-                },
-              )
-            ],
-          ),
+          child: ValueListenableBuilder(
+              valueListenable: alarmListNotifier,
+              builder: (context, List<AlarmModel> alarmList, Widget? child) {
+                return ListView.separated(
+                    itemBuilder: (ctx, index) {
+                      final data = alarmList[index];
+                      return Card(
+                        child: Column(
+                          children: [
+                            Text(data.label),
+                            Text(data.time.toString()),
+                            IconButton(
+                                onPressed: () {
+                                  if (data.id != null) {
+                                    deleteAlarms(data.id!);
+                                  }
+                                },
+                                icon: Icon(Ionicons.ice_cream_outline))
+                          ],
+                        ),
+                      );
+                      // print('answwwwwwwwwwwwwww${alarmList[1].label}');
+                    },
+                    separatorBuilder: (ctx, index) {
+                      return const Divider();
+                    },
+                    itemCount: alarmList.length);
+              }),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (ctx) => const AlarmSettingScreen(),
-              ),
+            showModalBottomSheet<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return SizedBox(
+                  height: 600,
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[SetAlarmWidget()],
+                    ),
+                  ),
+                );
+              },
             );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (ctx) => const AlarmSettingScreen(),
+            //   ),
+            // );
           },
           child: const Icon(
             Ionicons.add_outline,
