@@ -1,17 +1,19 @@
 import 'package:alarm_application/functions/db_functions.dart';
 import 'package:alarm_application/models/alarm_model.dart';
+import 'package:alarm_application/widgets/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+import 'package:weather/weather.dart';
 
 class SetAlarmWidget extends StatefulWidget {
   const SetAlarmWidget({super.key});
-
   @override
   State<SetAlarmWidget> createState() => _SetAlarmWidgetState();
 }
 
 class _SetAlarmWidgetState extends State<SetAlarmWidget> {
-  // final Box dataBox = Hive.box('alarm_box');
+  
   DateTime selectedDateTime = DateTime.now();
   TextEditingController labelController = TextEditingController();
   TextEditingController alarmController = TextEditingController();
@@ -19,7 +21,7 @@ class _SetAlarmWidgetState extends State<SetAlarmWidget> {
   @override
   void initState() {
     super.initState();
-    // dataBox = Hive.box('alarm_box');
+   
   }
 
   Future<void> pickTime() async {
@@ -41,7 +43,7 @@ class _SetAlarmWidgetState extends State<SetAlarmWidget> {
         if (selectedDateTime.isBefore(now)) {
           selectedDateTime = selectedDateTime.add(const Duration(days: 1));
         }
-        // print('aaaaaaaaaaaaaaaa${selectedDateTime}');
+       
       });
     }
   }
@@ -54,6 +56,7 @@ class _SetAlarmWidgetState extends State<SetAlarmWidget> {
         padding: EdgeInsets.all(h / 50),
         child: Column(
           children: [
+            WeatherWidgetState(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -63,28 +66,22 @@ class _SetAlarmWidgetState extends State<SetAlarmWidget> {
                     },
                     child: const Text('Cancel')),
                 TextButton(
-                    onPressed: () async {
-                      // _createItem({
-                      //   "alarm": selectedDateTime,
-                      //   "label": labelController.text
-                      // });
-                      final data = AlarmModel(
-                          time: selectedDateTime,
-                          label: labelController.text,
-                          id: null,
-                          isActive: true);
-                      // final box = Boxes.getData();
-                      // box.add(data);
-                      // print('bbbbbbbbbbb$selectedDateTime}');
-                      // data.save();
-                      // Navigator.pop(context);
-                      // labelController.clear();
+                  onPressed: () async {
+                    var uuid = Uuid().v4();
+                    int integerId = int.parse(uuid.substring(0, 8), radix: 16);
+                    print('uuidddd${integerId}');
+                    final data = AlarmModel(
+                        time: selectedDateTime,
+                        label: labelController.text,
+                        id: integerId,
+                        isActive: true);
+                    
+                    await addAlarm(data);
 
-                      // dataBox.add(newData);
-                      await addAlarm(data);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Save'))
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Save'),
+                ),
               ],
             ),
             RawMaterialButton(
@@ -110,11 +107,7 @@ class _SetAlarmWidgetState extends State<SetAlarmWidget> {
                 ),
               ),
             ),
-            TextButton(
-                onPressed: () {
-                  getAllAlarms();
-                },
-                child: const Text('jjjj'))
+          
           ],
         ));
   }

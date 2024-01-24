@@ -49,7 +49,7 @@ class _WeatherWidgetStateState extends State<WeatherWidgetState> {
                       color: const Color.fromARGB(19, 145, 145, 145),
                     ),
                   ),
-                  height: h / 3,
+                 
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
