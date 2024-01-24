@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 part 'alarm_model.g.dart';
 
@@ -12,5 +9,7 @@ class AlarmModel {
   final DateTime time;
   @HiveField(2)
   final String label;
-  AlarmModel({required this.id, required this.time, required this.label});
+  @HiveField(3)
+  bool? isActive;
+  AlarmModel({this.id, required this.time, required this.label,this.isActive});
 }

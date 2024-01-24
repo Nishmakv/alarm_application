@@ -20,19 +20,22 @@ class AlarmModelAdapter extends TypeAdapter<AlarmModel> {
       id: fields[0] as int?,
       time: fields[1] as DateTime,
       label: fields[2] as String,
+      isActive: fields[3] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, AlarmModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.time)
       ..writeByte(2)
-      ..write(obj.label);
+      ..write(obj.label)
+      ..writeByte(3)
+      ..write(obj.isActive);
   }
 
   @override

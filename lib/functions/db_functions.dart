@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:alarm_application/models/alarm_model.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -16,14 +14,17 @@ Future addAlarm(AlarmModel value) async {
 
 Future getAllAlarms() async {
   final alarmDb = await Hive.openBox<AlarmModel>('alarm_box');
-  // alarmListNotifier.value.clear();
+
   alarmListNotifier.value.addAll(alarmDb.values);
-  // print('qqqqqqqqqqqqq${alarmListNotifier.value.length}');
 
   alarmListNotifier.notifyListeners();
 }
 
 Future deleteAlarms(int id) async {
   final alarmDb = await Hive.openBox<AlarmModel>('alarm_box');
-  alarmDb.delete(id);
+  await alarmDb.deleteAt(id);
+  alarmListNotifier.value = List.from(alarmDb.values);
+  alarmListNotifier.notifyListeners();
+  getAllAlarms();
+  print(alarmDb.values);
 }
