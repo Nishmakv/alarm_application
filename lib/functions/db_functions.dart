@@ -17,25 +17,16 @@ Future getAllAlarms() async {
   final alarmDb = await Hive.openBox<AlarmModel>('alarm_box');
   alarmListNotifier.value = List.from(alarmDb.values);
   alarmListNotifier.notifyListeners();
-  // print('nnnnnnnnnnnnnnn${(alarmListNotifier as List).length} ');
+  
 }
 
-// Future deleteAlarms(String id) async {
-//   final alarmDb = await Hive.openBox<AlarmModel>('alarm_box');
-//   print('Deleting alarm with id: $id');
-//   await alarmDb.delete(id);
-//   print('Deleted successfully');
-//   getAllAlarms();
-//   alarmListNotifier.value = List.from(alarmDb.values);
-//   alarmListNotifier.notifyListeners();
-//   // print(alarmDb.values);
-// }
+
 
 Future deleteAlarms(int id) async {
   final alarmDb = await Hive.openBox<AlarmModel>('alarm_box');
 
   try {
-    // Find the index of the alarm with the given id
+   
     final index = alarmDb.values.toList().indexWhere((alarm) => alarm.id == id);
 
     if (index != -1) {

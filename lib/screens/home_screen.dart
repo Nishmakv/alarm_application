@@ -5,7 +5,7 @@ import 'package:alarm/alarm.dart';
 import 'package:alarm_application/functions/db_functions.dart';
 import 'package:alarm_application/models/alarm_model.dart';
 import 'package:alarm_application/screens/alarm_ring_screen.dart';
-import 'package:alarm_application/screens/set_alarm_widget.dart';
+import 'package:alarm_application/widgets/set_alarm_widget.dart';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
